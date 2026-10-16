@@ -1,0 +1,595 @@
+
+/* =========================================
+   1. PALETA DE CORES
+========================================= */
+
+:root {
+    --fundo-noite: #0b0715;
+    --berinjela-escura: #1a0d29;
+    --berinjela-media: #321744;
+
+    --roxo-profundo: #261044;
+    --roxo-violeta: #603b91;
+    --violeta: #9670d1;
+    --ametista: #b99ae8;
+    --lilas: #dfc9ff;
+
+    --rosa-pale: #e8c4e8;
+    --pessego: #f4ad88;
+
+    --dourado: #f5ce69;
+    --amarelo-luz: #fff0a6;
+    --bronze-sol: #cda35f;
+
+    --painel-borda: #7953a0;
+    --tinta-visor: #241122;
+}
+
+
+/* =========================================
+   2. CONFIGURAÇÕES GERAIS
+========================================= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    background: var(--fundo-noite);
+}
+
+body {
+    position: relative;
+    isolation: isolate;
+
+    margin: 0;
+    min-height: 100vh;
+    padding: 24px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+
+    font-family: Georgia, serif;
+    color: var(--rosa-pale);
+
+    background-color: #0c0815;
+
+    background-image:
+        radial-gradient(
+            ellipse at 12% 18%,
+            rgba(91, 49, 132, 0.30),
+            transparent 48%
+        ),
+        radial-gradient(
+            ellipse at 88% 82%,
+            rgba(73, 40, 110, 0.25),
+            transparent 48%
+        ),
+        radial-gradient(
+            ellipse at 70% 10%,
+            rgba(137, 94, 167, 0.12),
+            transparent 38%
+        ),
+        radial-gradient(
+            ellipse at 25% 95%,
+            rgba(207, 164, 88, 0.06),
+            transparent 38%
+        ),
+        linear-gradient(
+            135deg,
+            #0c0815,
+            #171020 52%,
+            #0b0712
+        );
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================
+   3. ESTRELAS E HALOS DO FUNDO
+========================================= */
+
+body::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+
+    pointer-events: none;
+
+    background-image:
+        radial-gradient(
+            circle at 14% 24%,
+            rgba(255, 231, 174, 0.85) 0 1px,
+            transparent 1.5px
+        ),
+        radial-gradient(
+            circle at 83% 19%,
+            rgba(223, 201, 255, 0.8) 0 1px,
+            transparent 1.5px
+        ),
+        radial-gradient(
+            circle at 76% 72%,
+            rgba(255, 231, 174, 0.75) 0 1px,
+            transparent 1.5px
+        ),
+        radial-gradient(
+            circle at 21% 81%,
+            rgba(223, 201, 255, 0.7) 0 1px,
+            transparent 1.5px
+        );
+
+    opacity: 0.65;
+}
+
+body::after {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 35%,
+            rgba(5, 3, 12, 0.30) 100%
+        );
+
+    box-shadow:
+        inset 0 0 120px rgba(0, 0, 0, 0.22);
+}
+
+
+/* =========================================
+   4. CARTÃO DA CALCULADORA
+========================================= */
+
+.calculadora {
+    position: relative;
+    z-index: 1;
+
+    width: 340px;
+    max-width: 100%;
+    flex-shrink: 0;
+
+    padding: 28px;
+
+    background: linear-gradient(
+        145deg,
+        #402451 0%,
+        #291637 45%,
+        #170b23 100%
+    );
+
+    border: 2px solid var(--painel-borda);
+    border-radius: 24px;
+
+    box-shadow:
+        0 0 0 4px rgba(121, 83, 160, 0.23),
+        0 12px 35px rgba(0, 0, 0, 0.65),
+        0 0 25px rgba(150, 112, 209, 0.24),
+        0 0 40px rgba(96, 59, 145, 0.12),
+        inset 0 2px 5px rgba(223, 201, 255, 0.13);
+}
+
+
+/* Esconde o título sem removê-lo do HTML */
+
+.calculadora h1 {
+    display: none;
+}
+
+
+/* Enfeites nos cantos do cartão */
+
+.calculadora::before,
+.calculadora::after {
+    position: absolute;
+    pointer-events: none;
+
+    font-size: 19px;
+    color: var(--dourado);
+
+    text-shadow:
+        0 0 5px rgba(255, 240, 166, 0.8),
+        0 0 12px rgba(245, 206, 105, 0.6);
+
+    animation: brilho 3s ease-in-out infinite alternate;
+}
+
+.calculadora::before {
+    content: "✧";
+    top: 12px;
+    left: 14px;
+}
+
+.calculadora::after {
+    content: "✦";
+    right: 14px;
+    bottom: 10px;
+
+    color: var(--lilas);
+
+    text-shadow:
+        0 0 6px rgba(223, 201, 255, 0.9),
+        0 0 13px rgba(150, 112, 209, 0.7);
+
+    animation-delay: 1.2s;
+}
+
+
+/* =========================================
+   5. VISOR
+========================================= */
+
+.visor {
+    min-height: 70px;
+    margin-bottom: 20px;
+    padding: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    background: linear-gradient(
+        135deg,
+        #f5e7ff,
+        #e8c4e8 55%,
+        #d5a8dc
+    );
+
+    color: var(--tinta-visor);
+
+    border: 1px solid #a879b5;
+    border-radius: 14px;
+
+    box-shadow:
+        inset 0 3px 7px rgba(39, 20, 36, 0.4),
+        0 0 12px rgba(185, 154, 232, 0.12),
+        0 2px 5px rgba(0, 0, 0, 0.3);
+
+    text-align: right;
+    font-size: 28px;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+
+/* =========================================
+   6. GRADE DOS BOTÕES
+========================================= */
+
+.botoes {
+    display: grid;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: 52px;
+
+    gap: 10px;
+}
+
+
+/* =========================================
+   7. ESTILO BASE DOS BOTÕES
+========================================= */
+
+.botoes button {
+    position: relative;
+    overflow: hidden;
+
+    width: 100%;
+    height: 52px;
+    min-width: 0;
+    min-height: 0;
+
+    margin: 0;
+    padding: 0;
+
+    border: 1px solid #684181;
+    border-radius: 13px;
+
+    background: linear-gradient(
+        145deg,
+        #603b79 0%,
+        #402451 45%,
+        #281332 100%
+    );
+
+    color: #f0e0ff;
+
+    font-family: Georgia, serif;
+    font-size: 19px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 0 #170b20,
+        0 5px 10px rgba(0, 0, 0, 0.4),
+        inset 0 1px 3px rgba(223, 201, 255, 0.2);
+
+    transition:
+        background 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+
+/* Reflexo delicado nos botões */
+
+.botoes button::before {
+    content: "";
+
+    position: absolute;
+    top: 2px;
+    left: 12%;
+
+    width: 76%;
+    height: 32%;
+
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.2),
+        rgba(255, 255, 255, 0)
+    );
+
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+
+/* Efeito ao passar o mouse */
+
+.botoes button:hover {
+    background: linear-gradient(
+        145deg,
+        #8056a3,
+        #583574,
+        #39204c
+    );
+
+    box-shadow:
+        0 4px 0 #170b20,
+        0 0 13px rgba(185, 154, 232, 0.4),
+        inset 0 1px 3px rgba(255, 255, 255, 0.25);
+}
+
+
+/* Efeito ao pressionar */
+
+.botoes button:active {
+    transform: translateY(3px);
+
+    box-shadow:
+        0 1px 0 #170b20,
+        inset 0 2px 5px rgba(0, 0, 0, 0.6);
+}
+
+
+/* =========================================
+   8. OPERADORES — VIOLETA
+========================================= */
+
+.botoes button.operador {
+    background: linear-gradient(
+        145deg,
+        #58418f,
+        #382663 55%,
+        #21153f
+    );
+
+    color: var(--lilas);
+    border-color: #8062b6;
+
+    text-shadow: 0 0 6px rgba(223, 201, 255, 0.3);
+
+    box-shadow:
+        0 4px 0 #120b27,
+        0 5px 12px rgba(0, 0, 0, 0.5),
+        inset 0 1px 3px rgba(223, 201, 255, 0.25);
+}
+
+.botoes button.operador:hover {
+    background: linear-gradient(
+        145deg,
+        #7959b8,
+        #50377e,
+        #30204e
+    );
+
+    color: #fff4ff;
+
+    box-shadow:
+        0 4px 0 #120b27,
+        0 0 14px rgba(185, 154, 232, 0.55),
+        inset 0 1px 3px rgba(255, 255, 255, 0.35);
+}
+
+
+/* =========================================
+   9. BOTÃO IGUAL — DOURADO
+========================================= */
+
+.botoes button.igual {
+    grid-row: 4 / span 2;
+    grid-column: 4;
+
+    height: auto;
+
+    background: linear-gradient(
+        145deg,
+        #fff0a6,
+        #f5ce69 40%,
+        #d99a3c 75%,
+        #a96626
+    );
+
+    color: #321b09;
+    border-color: #ffe7a0;
+
+    font-size: 23px;
+
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.35);
+
+    box-shadow:
+        0 4px 0 #603b19,
+        0 5px 14px rgba(0, 0, 0, 0.5),
+        0 0 12px rgba(245, 206, 105, 0.2),
+        inset 0 1px 4px rgba(255, 255, 220, 0.65);
+}
+
+.botoes button.igual:hover {
+    background: linear-gradient(
+        145deg,
+        #fff8c9,
+        #ffe17e,
+        #e6ad4d,
+        #bb7930
+    );
+
+    box-shadow:
+        0 4px 0 #603b19,
+        0 0 19px rgba(255, 224, 126, 0.75),
+        inset 0 1px 4px rgba(255, 255, 255, 0.8);
+}
+
+.botoes button.igual:active {
+    box-shadow:
+        0 1px 0 #603b19,
+        inset 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+
+/* =========================================
+   10. BOTÃO ZERO
+========================================= */
+
+.botoes button.zero {
+    grid-column: span 2;
+}
+
+
+/* =========================================
+   11. CRÉDITOS DO PROJETO
+========================================= */
+
+.creditos {
+    position: relative;
+    z-index: 1;
+
+    width: 340px;
+    max-width: 100%;
+
+    text-align: center;
+
+    color: var(--lilas);
+    font-size: 12px;
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+
+    text-shadow: 0 0 8px rgba(185, 154, 232, 0.2);
+}
+
+.creditos-titulo {
+    margin-bottom: 5px;
+
+    color: var(--dourado);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.creditos-nomes {
+    margin: 0;
+}
+
+.creditos-rodape {
+    margin-top: 3px;
+
+    color: rgba(223, 201, 255, 0.65);
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+
+/* =========================================
+   12. ANIMAÇÕES
+========================================= */
+
+@keyframes brilho {
+    from {
+        opacity: 0.55;
+        transform: scale(0.9) rotate(-8deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1.08) rotate(8deg);
+    }
+}
+
+
+/* =========================================
+   13. ACESSIBILIDADE
+========================================= */
+
+.botoes button:focus-visible {
+    outline: 3px solid var(--amarelo-luz);
+    outline-offset: 3px;
+}
+
+
+/* =========================================
+   14. TELAS PEQUENAS
+========================================= */
+
+@media (max-width: 380px) {
+    body {
+        padding: 16px;
+    }
+
+    .calculadora {
+        padding: 20px;
+    }
+
+    .botoes {
+        gap: 8px;
+        grid-auto-rows: 48px;
+    }
+
+    .botoes button {
+        height: 48px;
+    }
+
+    .botoes button.igual {
+        height: auto;
+    }
+}
+
+
+/* =========================================
+   15. PREFERÊNCIA POR MENOS MOVIMENTO
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .calculadora::before,
+    .calculadora::after {
+        animation: none;
+    }
+
+    .botoes button {
+        transition: none;
+    }
+}
