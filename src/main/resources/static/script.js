@@ -1,4 +1,3 @@
-
 const visor = document.querySelector(".visor");
 const botoes = document.querySelector(".botoes");
 
@@ -15,29 +14,25 @@ botoes.addEventListener("click", function(evento) {
 
     // Entrada dos numeros
     if (botao.dataset.numero !== undefined) {
+        const digito = botao.dataset.numero;
 
-    if (
-    botao.dataset.numero === "." &&
-    visor.textContent.includes(".")
-) {
-    return;
-}
+        if (aguardandoSegundoNumero || resultadoMostrado) {
+            visor.textContent = (digito === ".") ? "0." : digito;
+            aguardandoSegundoNumero = false;
+            resultadoMostrado = false;
 
-    if (resultadoMostrado) {
-        visor.textContent = botao.dataset.numero;
-        resultadoMostrado = false;
+        } else if (digito === ".") {
+            if (!visor.textContent.includes(".")) {
+                visor.textContent += ".";
+            }
 
-    } else if (aguardandoSegundoNumero) {
-        visor.textContent = botao.dataset.numero;
-        aguardandoSegundoNumero = false;
+        } else if (visor.textContent === "0") {
+            visor.textContent = digito;
 
-    } else if (visor.textContent === "0") {
-        visor.textContent = botao.dataset.numero;
-
-    } else {
-        visor.textContent += botao.dataset.numero;
+        } else {
+            visor.textContent += digito;
+        }
     }
-}
 
     // Limpar tudo (AC)
     if (botao.dataset.acao === "limpar") {
@@ -51,66 +46,41 @@ botoes.addEventListener("click", function(evento) {
 
     // Apagar o ultimo caractere
     if (botao.dataset.acao === "apagar") {
-        visor.textContent = visor.textContent.slice(0, -1);
-
-        if (visor.textContent === "") {
+        if (resultadoMostrado || visor.textContent === "Erro") {
             visor.textContent = "0";
+            resultadoMostrado = false;
+        } else if (!aguardandoSegundoNumero) {
+            visor.textContent = visor.textContent.slice(0, -1);
+
+            if (visor.textContent === "" || visor.textContent === "-") {
+                visor.textContent = "0";
+            }
         }
     }
 
     // Escolher a operacao
-    if (botao.dataset.operacao === "somar") {
+    if (botao.dataset.operacao !== undefined) {
         primeiroNumero = Number(visor.textContent);
-        operacao = "somar";
+        operacao = botao.dataset.operacao;
         aguardandoSegundoNumero = true;
+        resultadoMostrado = false;
     }
 
-    if (botao.dataset.operacao === "subtrair") {
-        primeiroNumero = Number(visor.textContent);
-        operacao = "subtrair";
-        aguardandoSegundoNumero = true;
-    }
-
-    if (botao.dataset.operacao === "multiplicar") {
-        primeiroNumero = Number(visor.textContent);
-        operacao = "multiplicar";
-        aguardandoSegundoNumero = true;
-    }
-
-    if (botao.dataset.operacao === "dividir") {
-        primeiroNumero = Number(visor.textContent);
-        operacao = "dividir";
-        aguardandoSegundoNumero = true;
-    }
-
-    // Calcular resultado
+    // Calcular resultado (quem calcula e o Spring Boot)
     if (botao.dataset.acao === "calcular") {
+        if (operacao === null) {
+            return;
+        }
+
         segundoNumero = Number(visor.textContent);
-
-        if (operacao === "somar") {
-            visor.textContent = primeiroNumero + segundoNumero;
-        }
-
-        if (operacao === "subtrair") {
-            visor.textContent = primeiroNumero - segundoNumero;
-        }
-
-        if (operacao === "multiplicar") {
-            visor.textContent = primeiroNumero * segundoNumero;
-        }
-
-        if (operacao === "dividir") {
-        if (segundoNumero === 0) {
-        visor.textContent = "Erro";
-    } else {
-        visor.textContent = primeiroNumero / segundoNumero;
-    }
-}
-
+        calcularNoServidor(operacao, primeiroNumero, segundoNumero);
+        operacao = null
         resultadoMostrado = true;
     }
 });
 
+
+/* Teclado */
 
 document.addEventListener("keydown", function(evento) {
     const tecla = evento.key;
@@ -164,3 +134,21 @@ document.addEventListener("keydown", function(evento) {
         botaoCorrespondente.click();
     }
 });
+
+
+/* Chamada ao back end (Spring Boot) */
+
+async function calcularNoServidor(op, a, b) {
+    try {
+        const resp = await fetch(`/${op}?a=${a}&b=${b}`);
+        const texto = await resp.text();
+
+        if (texto.startsWith("Erro")) {
+            visor.textContent = "Erro";
+        } else {
+            visor.textContent = String(Number(texto));
+        }
+    } catch (erro) {
+        visor.textContent = "Erro";
+    }
+}
